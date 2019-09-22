@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fj.boot.app.dao.PersonDao">
+	<sql id="person_c_columns">
+		id, name, age
+	</sql>
+	<select id="query"  resultType="com.fj.boot.app.domain.PersonDO">
+		select <include refid="person_c_columns"/>
+		from t_person p
+	</select>
+	<select id="queryById" parameterType="map" resultType="com.fj.boot.app.domain.PersonDO">
+		select <include refid="person_c_columns"/>
+		from t_person p
+		where id = #{id}
+	</select>
+	<select id="queryByDynamicId" parameterType="map" resultType="com.fj.boot.app.domain.PersonDO">
+		select <include refid="person_c_columns"/>
+		from t_person p
+		<where>
+			<if test="id != null">
+				id = #{id} and 1=1
+			</if>
+		</where>
+	</select>
+
+	<resultMap id="testA" type="com.fj.boot.app.domain.PersonDO">
+
+		<id property="id" column="id" />
+		<result property="age" column="age"/>
+		<result property="name" column="name"/>
+		<result property="personNo" column="personNo"/>
+		<collection property="tMaxMinList" ofType="com.fj.boot.app.domain.TMaxMin" column="personNo"  foreignColumn="personNoTmm" >
+		<!--<collection property="tMaxMinList" ofType="com.fj.boot.app.domain.TMaxMin"  >-->
+			<id property="id" column="tmmId"/>
+			<result property="minA" column="minA"/>
+			<result property="maxA" column="maxA"/>
+			<result property="personNoTmm" column="personNoTmm"/>
+		</collection>
+	</resultMap>
+
+	<select id="listPerson" resultMap="testA">
+		select
+		  	p.id as id, p.name as name, p.age as age, p.person_no as personNo,
+		  	tmm.id as tmmId, tmm.min_a as minA, tmm.max_a as maxA, tmm.person_no as personNoTmm
+		from t_person p
+		left join t_min_max tmm on p.person_no = tmm.person_no
+	</select>
+</mapper>
