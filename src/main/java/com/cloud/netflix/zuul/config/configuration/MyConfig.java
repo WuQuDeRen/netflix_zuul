@@ -1,4 +1,4 @@
-package com.cloud.netflix.eureka.config.configuration;
+package com.cloud.netflix.zuul.config.configuration;
 
 import lombok.Data;
 

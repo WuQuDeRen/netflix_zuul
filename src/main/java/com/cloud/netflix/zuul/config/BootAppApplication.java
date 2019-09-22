@@ -1,4 +1,4 @@
-package com.cloud.netflix.eureka.config;
+package com.cloud.netflix.zuul.config;
 
 import com.cloud.netflix.eureka.config.configuration.MyConfig;
 import org.mybatis.spring.annotation.MapperScan;
